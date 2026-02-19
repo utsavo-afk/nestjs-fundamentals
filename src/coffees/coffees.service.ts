@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -7,6 +7,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Flavor } from './entities/flavor.entity';
 import { PaginaionQueryDto } from 'src/common/dto/paginationQuery.dto';
 import { Event } from 'src/events/entities/event.entity';
+import { COFFEE_BRANDS } from './coffees.constants';
 
 @Injectable()
 export class CoffeesService {
@@ -17,7 +18,10 @@ export class CoffeesService {
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
     private readonly conn: DataSource,
-  ) {}
+    @Inject(COFFEE_BRANDS) coffeeBrands: string[],
+  ) {
+    this.logger.log(coffeeBrands);
+  }
   // private coffees: Coffee[] = [
   //   {
   //     id: 1,
