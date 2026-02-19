@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
@@ -11,10 +12,12 @@ import {
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
-import { FindCoffeesDto } from './dto/find-coffees.dto';
+import { PaginaionQueryDto } from 'src/common/dto/paginationQuery.dto';
 
 @Controller('coffees')
 export class CoffeesController {
+  private readonly logger = new Logger(CoffeesController.name);
+
   constructor(private readonly coffeeService: CoffeesService) {}
   // @Get()
   // findAll(@Res() res) {
@@ -23,9 +26,8 @@ export class CoffeesController {
   //   res.status(200).send('This action returns all coffees');
   // }
   @Get()
-  findAll(@Query() query: FindCoffeesDto) {
-    const { limit, offset } = query;
-    return this.coffeeService.findAll(Number(limit), Number(offset));
+  findAll(@Query() query: PaginaionQueryDto) {
+    return this.coffeeService.findAll(query);
   }
 
   @Get(':id')
